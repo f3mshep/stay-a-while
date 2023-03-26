@@ -16,7 +16,7 @@ services:
   postgresql:
     environment:
       POSTGRES_DB: mybb
-      POSTGRES_PASSWORD:${BB_PASS}
+      POSTGRES_PASSWORD: ${BB_PASS}
       POSTGRES_USER: mybb
     image: postgres:13.2-alpine
     hostname: psqldb
