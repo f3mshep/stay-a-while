@@ -2,7 +2,7 @@ services:
   mybb:
     image: mybb/mybb:latest
     volumes:
-    - ${PWD}/mybb:/var/www/html:rw
+    - ./mybb:/var/www/html:rw
 
   nginx:
     image: nginx:mainline-alpine
@@ -10,8 +10,8 @@ services:
     - published: 80
       target: 80
     volumes:
-    - ${PWD}/nginx:/etc/nginx/conf.d:ro
-    - ${PWD}/mybb:/var/www/html:ro
+    - ./nginx:/etc/nginx/conf.d:ro
+    - ./mybb:/var/www/html:ro
 
   postgresql:
     environment:
@@ -24,6 +24,6 @@ services:
     - published: 5432
       target: 5432
     volumes:
-    - ${PWD}/postgres/data:/var/lib/postgresql/data:rw
+    - ./postgres/data:/var/lib/postgresql/data:rw
 
 version: '3.8'
