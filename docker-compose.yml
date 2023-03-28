@@ -5,13 +5,18 @@ services:
     - ./mybb:/var/www/html:rw
 
   nginx:
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     image: nginx:mainline-alpine
     ports:
     - published: 80
       target: 80
+    - published: 443
+      target: 443
     volumes:
     - ./nginx:/etc/nginx/conf.d:ro
     - ./mybb:/var/www/html:ro
+    - ./data/certbot/conf:/etc/letsencrypt
+    - ./data/certbot/www:/var/www/certbot
 
   postgresql:
     environment:
@@ -25,5 +30,12 @@ services:
       target: 5432
     volumes:
     - ./postgres/data:/var/lib/postgresql/data:rw
+
+  certbot:
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    image: certbot/certbot
+    volumes:
+    - ./data/certbot/conf:/etc/letsencrypt
+    - ./data/certbot/www:/var/www/certbot
 
 version: '3.8'
